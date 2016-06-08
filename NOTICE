@@ -1,0 +1,204 @@
+Oracle BDGlue
+Copyright (c) 2015 Oracle and/or its affiliates.  All rights reserved.
+
+This product includes software developed at
+Oracle (http://www.oracle.com/) 
+
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+======================
+kafka_2.10-0.8.2.1.jar and subsequent versions
+======================
+
+Kafka
+
+This product includes software developed by the Apache Software Foundation (http://www.apache.org/).
+
+This product includes jopt-simple, a library for parsing command line options (http://jopt-simple.sourceforge.net/).
+
+This product includes junit, developed by junit.org.
+
+This product includes zkclient, developed by Stefan Groschupf, http://github.com/sgroschupf/zkclient
+
+This produce includes joda-time, developed by joda.org (joda-time.sourceforge.net)
+
+This product includes the scala runtime and compiler (www.scala-lang.org) developed by EPFL, which includes the following license:
+
+This product includes zookeeper, a Hadoop sub-project (http://hadoop.apache.org/zookeeper)
+
+This product includes log4j, an Apache project (http://logging.apache.org/log4j)
+
+This product includes easymock, developed by easymock.org (http://easymock.org)
+
+This product includes objenesis, developed by Joe Walnes, Henri Tremblay, Leonardo Mesquita (http://code.google.com/p/objenesis)
+
+This product includes cglib, developed by sourceforge.net (http://cglib.sourceforge.net)
+
+This product includes asm, developed by OW2 consortium (http://asm.ow2.org)
+-----------------------------------------------------------------------
+
+SCALA LICENSE
+
+Copyright (c) 2002-2010 EPFL, Lausanne, unless otherwise specified.
+All rights reserved.
+
+This software was developed by the Programming Methods Laboratory of the
+Swiss Federal Institute of Technology (EPFL), Lausanne, Switzerland.
+
+Permission to use, copy, modify, and distribute this software in source
+or binary form for any purpose with or without fee is hereby granted,
+provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+   3. Neither the name of the EPFL nor the names of its contributors
+      may be used to endorse or promote products derived from this
+      software without specific prior written permission.
+
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+-----------------------------------------------------------------------
+
+
+==============
+avro-1.7.7.jar and subsequent versions
+==============
+
+Apache Avro
+Copyright 2010 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+
+===============================================================
+flume-ng-sdk-1.5.0.1.jar, flume-ng-core-1.5.0.1.jar, 
+flume-ng-configuration-1.5.0.1.jar, flume-hdfs-sink-1.5.0.1.jar
+and subsequent versions of each
+===============================================================
+
+Apache Flume
+Copyright 2012 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+Portions of this software were developed at
+Cloudera, Inc. (http://www.cloudera.com/).
+
+
+=======================
+hadoop-common-2.5.1.jar and subsequent versions
+=======================
+
+This product includes software developed by The Apache Software
+Foundation (http://www.apache.org/).
+
+
+=================================
+hbase-common-0.98.6.1-hadoop2.jar and subsequent versions
+=================================
+
+Apache HBase
+Copyright 2007-2015 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+--
+This product incorporates portions of the 'Hadoop' project
+
+Copyright 2007-2009 The Apache Software Foundation
+
+Licensed under the Apache License v2.0
+--
+Our Orca logo we got here: http://www.vectorfree.com/jumping-orca
+It is licensed Creative Commons Attribution 3.0.
+See https://creativecommons.org/licenses/by/3.0/us/
+We changed the logo by stripping the colored background, inverting
+it and then rotating it some.
+
+Later we found that vectorfree.com image is not properly licensed.
+The original is owned by vectorportal.com. The original was
+relicensed so we could use it as Creative Commons Attribution 3.0.
+The license is bundled with the download available here:
+http://www.vectorportal.com/subcategory/205/KILLER-WHALE-FREE-VECTOR.eps/ifile/9136/detailtest.asp
+--
+This product includes portions of the Bootstrap project v3.0.0
+
+Copyright 2013 Twitter, Inc.
+
+Licensed under the Apache License v2.0
+
+This product uses the Glyphicons Halflings icon set.
+
+http://glyphicons.com/
+
+Copyright Jan Kovařík
+
+Licensed under the Apache License v2.0 as a part of the Bootstrap project.
+
+--
+This product includes portions of the Guava project v14, specifically
+'hbase-common/src/main/java/org/apache/hadoop/hbase/io/LimitInputStream.java'
+
+Copyright (C) 2007 The Guava Authors
+
+Licensed under the Apache License, Version 2.0
+
+
+===========================
+jackson-core-asl-1.9.13.jar and subsequent versions
+===========================
+
+# Jackson JSON processor
+
+Jackson is a high-performance, Free/Open Source JSON processing library.
+It was originally written by Tatu Saloranta (tatu.saloranta@iki.fi), and has
+been in development since 2007.
+It is currently developed by a community of developers, as well as supported
+commercially by FasterXML.com.
+
+## Licensing
+
+Jackson core and extension components may licensed under different licenses.
+To find the details that apply to this artifact see the accompanying LICENSE file.
+For more information, including possible other licensing options, contact
+FasterXML.com (http://fasterxml.com).
+
+## Credits
+
+A list of contributors may be found from CREDITS file, which is included
+in some artifacts (usually source distributions); but is always available
+from the source code management (SCM) system project uses.
+
+
+
