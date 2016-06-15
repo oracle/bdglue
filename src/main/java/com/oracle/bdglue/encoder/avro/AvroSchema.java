@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.avro.JsonProperties;
 import org.apache.avro.Schema;
 
 import org.codehaus.jackson.JsonNode;
@@ -169,7 +170,8 @@ public class AvroSchema {
         Schema colSchema;
         Schema recordSchema;
         String fieldDoc;
-        JsonNode defValue;
+        //JsonNode defValue;
+        Object defValue;
 
 
         schemaFields = new ArrayList<>();
@@ -179,7 +181,8 @@ public class AvroSchema {
         for(String tcol : metadataHelper.getMetadataCols()) {
             columnName = tcol;
             colSchema = Schema.create(Schema.Type.STRING);
-            field = new Schema.Field(columnName, colSchema, fieldDoc, null);
+            // deprecated - field = new Schema.Field(columnName, colSchema, fieldDoc, null);
+            field = new Schema.Field(columnName, colSchema, fieldDoc, (Object)null);
             schemaFields.add(field);
         }
         
@@ -195,7 +198,7 @@ public class AvroSchema {
             colSchema = columnInfo.getFieldSchema();
             
             if (colSchema.getType() == Schema.Type.UNION)
-                defValue = NullNode.getInstance();
+                defValue = JsonProperties.NULL_VALUE;
             else defValue = null;
                 
             field = new Schema.Field(columnName, colSchema, fieldDoc, defValue);
@@ -290,10 +293,12 @@ public class AvroSchema {
         Schema stringSchema = Schema.create(Schema.Type.STRING);
 
         schemaFields = new ArrayList<>();
-        field = new Schema.Field("headers", Schema.createMap(stringSchema), "", null);
+        // deprecated - field = new Schema.Field("headers", Schema.createMap(stringSchema), "", null);
+        field = new Schema.Field("headers", Schema.createMap(stringSchema), "", (Object)null);
         schemaFields.add(field);
 
-        field = new Schema.Field("body", schemaIn, "body doc", null);
+        // deprecated - field = new Schema.Field("body", schemaIn, "body doc", null);
+        field = new Schema.Field("body", schemaIn, "body doc", (Object)null);
         schemaFields.add(field);
 
         schemaOut = Schema.createRecord("Event", "", "", false);
