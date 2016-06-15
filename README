@@ -15,7 +15,9 @@ To build this project,
 
    git clone https://github.com/bdglue/bdglue
 
-simply type "make" from the command line. 
+simply type "make" from the command line. Under the covers, "make" 
+will be calling Maven, but everyone understands "make". Maven is 
+incredibly powerful, but far more confusing.
 
 You will need to configure two environment variables:
 
@@ -28,5 +30,5 @@ You will need to configure two environment variables:
   then you would set GGBD_VERSION=12.2.0.1.0.012.
 
 
-Assumptions: gmake, gcc, Maven, and Java 1.8 are all installed and 
+Assumptions: gmake, Maven, and Java 1.8 are all installed and 
 configured.
