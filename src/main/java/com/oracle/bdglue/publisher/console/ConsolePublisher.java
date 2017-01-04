@@ -54,8 +54,16 @@ public class ConsolePublisher implements BDGluePublisher {
      */
     @Override
     public void writeEvent(String threadName, EventData evt) {
-        System.out.format("%s:%s : %s %n", threadName, 
-                          evt.getMetaValue(EventHeader.TABLE), (String)evt.eventBody());
+        Object event = evt.eventBody();
+        String outval = null;
+
+        if (event instanceof byte[]) {
+            outval = new String((byte[]) event);
+        } else {
+            outval = event.toString();
+        }
+
+        System.out.format("%s:%s : %s %n", threadName, evt.getMetaValue(EventHeader.TABLE), outval);
     }
 
     /**

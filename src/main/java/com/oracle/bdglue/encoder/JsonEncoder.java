@@ -25,7 +25,6 @@ import java.io.IOException;
 
 import java.util.Map;
 
-import org.apache.avro.util.Utf8;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import org.codehaus.jackson.JsonFactory;
