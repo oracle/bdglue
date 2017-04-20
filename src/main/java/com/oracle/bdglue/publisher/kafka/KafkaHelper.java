@@ -31,9 +31,6 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 
-import org.apache.flume.Context;
-import org.apache.flume.Event;
-import org.apache.flume.EventDeliveryException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,36 +84,6 @@ public class KafkaHelper {
         return rval;
     }
 
-    /**
-     * Configure the class based on the Context from the Flume sink.
-     * Kafka producer properties is generated as follows:
-     * 1. We generate a properties object with some static defaults that
-     * can be overridden by Sink configuration
-     * 2. We add the configuration users added for Kafka (parameters starting
-     * with .kafka. and must be valid Kafka Producer properties
-     * 3. We add the sink's documented parameters which can override other
-     * properties
-     *
-     * @param context the configuration context
-     */
-    public void configure(Context context) {
-        batchSize = context.getInteger(KafkaProperties.BATCH_SIZE_FLUME, KafkaProperties.DEFAULT_BATCH_SIZE);
-        messageList = new ArrayList<KeyedMessage<Object, Object>>(batchSize);
-
-        topic = context.getString(KafkaProperties.TOPIC_FLUME, KafkaProperties.DEFAULT_TOPIC);
-        if (topic.equals(KafkaProperties.DEFAULT_TOPIC)) {
-            LOG.warn("The Property 'topic' is not set. " + "Using the default topic name: " +
-                     KafkaProperties.DEFAULT_TOPIC);
-        }
-        LOG.info("Using the static topic: " + topic + 
-                 ". This may be overridden in the Flume event header.");
-
-        kafkaProps = KafkaProperties.getKafkaFlumeProperties(context);
-
-        messageHelper.setTopic(topic);
-        
-        logConfiguration();
-    }
 
     /**
      * Configure the class based on the properties for the user exit.
@@ -207,34 +174,7 @@ public class KafkaHelper {
         // TODO Implement this method
     }
 
-    /**
-     * Process the received Flume event. Assumes the data is already formatted
-     * in the event body.
-     * @param event The Flume event we want to process.
-     * @throws EventDeliveryException if a Flume error occurs.
-     */
-    public void process(Event event) throws EventDeliveryException {
-        String eventTopic = null;
-        String eventKey = null;
-
-        Object eventBody = event.getBody();
-        
-
-        eventTopic = messageHelper.getTopic(event);
-        
-
-        eventKey = messageHelper.getMessageKey(event);;
-
-        if (LOG.isDebugEnabled()) {
-           LOG.debug("{Event} " + eventTopic + " : " + eventKey + " : " + eventBody);
-        }
-        
-
-        // create a message and add to buffer
-        KeyedMessage<Object, Object> data = new KeyedMessage<Object, Object>(eventTopic, eventKey, eventBody);
-        
-        messageList.add(data);
-    }
+   
 
     /**
      * Process the received BDGlue event. Assumes the data is already formatted

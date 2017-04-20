@@ -37,10 +37,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.flume.Context;
-import org.apache.flume.Event;
-import org.apache.flume.EventDeliveryException;
-import org.apache.flume.FlumeException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HConstants;
@@ -97,36 +93,7 @@ public class AsyncHbaseHelper {
         conf = HBaseConfiguration.create();
     }
 
-    /**
-     * Configure the class based on the Context from the Flume sink.
-     * Kafka producer properties is generated as follows:
-     * 1. We generate a properties object with some static defaults that
-     * can be overridden by Sink configuration
-     * 2. We add the configuration users added for Kafka (parameters starting
-     * with .kafka. and must be valid Kafka Producer properties
-     * 3. We add the sink's documented parameters which can override other
-     * properties
-     *
-     * @param context the configuration context
-     */
-    public void configure(Context context) {
-        factory = new JsonFactory();
-        batchSize = 
-            Integer.parseInt(context.getString(AsyncHbaseProperties.BATCHSIZE_FLUME,
-                                               AsyncHbaseProperties.DEFAULT_BATCHSIZE));
-
-        timeout =
-            Integer.parseInt(context.getString(AsyncHbaseProperties.TIMEOUT_FLUME,
-                                               AsyncHbaseProperties.DEFAULT_TIMEOUT));
-        if (timeout <= 0) {
-            LOG.warn("Timeout should be positive for Hbase sink. " + 
-                        "Sink will not timeout.");
-            timeout = Integer.parseInt(AsyncHbaseProperties.DEFAULT_TIMEOUT);
-        }
-
-        logConfiguration();
-    }
-
+   
     /**
      * Configure the class based on the properties for the user exit.
      * @param properties the properties we want to explicity configure
@@ -201,56 +168,7 @@ public class AsyncHbaseHelper {
         initializeCallbacks();
     }
 
-    /**
-     * Process the received Flume event.
-     * @param event the Flume event we want to Process
-     * @throws EventDeliveryException if a Flume error occurs
-     */
-    public void process(Event event) throws EventDeliveryException {
-        List<PutRequest> actions;
-        
-        /*
-         * Extracts the needed information from the event header
-         */
-        String rowKeyStr = event.getHeaders().get(AsyncHbaseProperties.ROWKEY_HDR);
-        if (rowKeyStr == null) {
-           throw new FlumeException("No row key found in headers!");
-        }
-        currentRowKey = rowKeyStr.getBytes();
-        
-        String tableStr = event.getHeaders().get(AsyncHbaseProperties.TABLE_HDR);
-        if (tableStr == null) {
-           throw new FlumeException("No table name found in headers!");
-        }
-        table = tableStr.getBytes();
-        
-        String cf = event.getHeaders().get(AsyncHbaseProperties.COLUMN_FAMILY_HDR);
-        if (cf == null) {
-           throw new FlumeException("No column family found in headers!");
-        }
-        colFam = cf.getBytes();
-        
-
-        try {
-            actions = setRowValues(event);
-        } catch (JsonParseException e) {
-            throw(new EventDeliveryException("JsonParseException",e));
-        } catch (IOException e) {
-            throw(new EventDeliveryException("IOException", e));
-        }
-        List<AtomicIncrementRequest> increments = getIncrements();
-        callbacksExpected.addAndGet(actions.size() + increments.size());
-
-        for (PutRequest action : actions) {
-            client.put(action).addCallbacks(putSuccessCallback, putFailureCallback);
-        }
-        for (AtomicIncrementRequest increment : increments) {
-            client.atomicIncrement(increment).
-                addCallbacks(incrementSuccessCallback,
-                             incrementFailureCallback);
-        }
-        
-    }
+  
 
     /**
      * Process the received BDGlue event.
@@ -264,19 +182,19 @@ public class AsyncHbaseHelper {
          */
         String rowKeyStr = event.getHeaders().get(AsyncHbaseProperties.ROWKEY_HDR);
         if (rowKeyStr == null) {
-           throw new FlumeException("No row key found in headers!");
+           throw new RuntimeException("No row key found in headers!");
         }
         currentRowKey = rowKeyStr.getBytes();
         
         String tableStr = event.getHeaders().get(AsyncHbaseProperties.TABLE_HDR);
         if (tableStr == null) {
-           throw new FlumeException("No table name found in headers!");
+           throw new RuntimeException("No table name found in headers!");
         }
         table = tableStr.getBytes();
         
         String cf = event.getHeaders().get(AsyncHbaseProperties.COLUMN_FAMILY_HDR);
         if (cf == null) {
-           throw new FlumeException("No column family found in headers!");
+           throw new RuntimeException("No column family found in headers!");
         }
         colFam = cf.getBytes();
         
@@ -356,69 +274,6 @@ public class AsyncHbaseHelper {
             new FailureCallback<Long, Long>(lock, callbacksReceived, txnFail, condition);
     }
 
-
-    /**
-     * Parse the Json-formatted event body and create a "put" for
-     * each column.
-     *
-     * @param event the flume event we are processing
-     * @return the list of actions that should be written out to hbase
-     *
-     * @throws IOException if a JSON error occurs
-     */
-    public List<PutRequest> setRowValues(Event event) throws IOException {
-        byte[] data;
-        byte[] columnName;
-        parser = factory.createJsonParser(event.getBody());
-        puts.clear();
-        while (parser.nextToken() != JsonToken.END_OBJECT) {
-            // This approach does not support arrays and other
-            // complex types. Shouldn't be an issue in this case.
-            if (parser.getCurrentToken() == JsonToken.FIELD_NAME) {
-                parser.nextToken();
-                columnName = parser.getCurrentName().getBytes();
-                switch (parser.getCurrentToken()) {
-                case VALUE_TRUE:
-                    data = ByteBuffer.allocate(4).putInt(1).array();
-                    break;
-                case VALUE_FALSE:
-                    data = ByteBuffer.allocate(4).putInt(0).array();
-                    break;
-                case VALUE_NULL:
-                    data = null;
-                    break;
-                case VALUE_NUMBER_FLOAT:
-                    // TODO: perhaps need to worry about 
-                    // double, float, Decimal???
-                    data = ByteBuffer.allocate(4).
-                        putFloat(parser.getFloatValue()).array();
-                    break;
-                case VALUE_NUMBER_INT:
-                    // TODO: perhaps need to worry about 
-                    // int, long, etc.?
-                    data = ByteBuffer.allocate(4).
-                        putInt(parser.getIntValue()).array();
-                    break;
-                case VALUE_STRING:
-                    data = parser.getText().getBytes();
-                    break;
-                default:
-                    // not a token we care about right now
-                    LOG.error("Unhandled Json value type encountered during parsing");
-                    data = null;
-                    throw new FlumeException("Unrecognized JSON value type");
-                }
-
-                //Generate a PutRequest for each column.
-                PutRequest req = new PutRequest(table, currentRowKey, 
-                                                colFam, columnName, data);
-                puts.add(req);
-
-            }
-        }
-        parser.close();
-        return puts;
-    }
 
     /**
      * Loop through the data for this operation.

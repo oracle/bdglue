@@ -19,17 +19,12 @@ package com.oracle.bdglue.publisher.nosql;
 import com.oracle.bdglue.BDGluePropertyValues;
 import com.oracle.bdglue.common.PropertyManagement;
 import com.oracle.bdglue.encoder.EventData;
-import com.oracle.bdglue.publisher.flume.sink.nosql.BDGlueNoSQLSinkConfig;
 
 import oracle.kv.Durability;
 import oracle.kv.FaultException;
 import oracle.kv.KVStore;
 import oracle.kv.KVStoreConfig;
 import oracle.kv.KVStoreFactory;
-
-import org.apache.flume.Context;
-import org.apache.flume.Event;
-import org.apache.flume.EventDeliveryException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,20 +74,6 @@ public abstract class NoSQLHelper {
     }
 
 
-    /**
-     * Configure the class based on the Context from the Flume sink.
-     * @param context the configuration Context
-     */
-    public void configure(Context context) {
-        // Get configuration properties for KV store
-        kvHost = context.getString(BDGlueNoSQLSinkConfig.KVHOST, "localhost");
-        kvPort = context.getString(BDGlueNoSQLSinkConfig.KVPORT, "5000");
-        kvStoreName = context.getString(BDGlueNoSQLSinkConfig.KVSTORE, "kvstore");
-        kvStoreDurability = context.getString(BDGlueNoSQLSinkConfig.DURABILITY, "WRITE_NO_SYNC");
-        setAPIType(context.getString(BDGlueNoSQLSinkConfig.KVAPI, "kv_api"));
-
-        logConfiguration();
-    }
 
     /**
      * Configure the class based on the properties for the user exit.
@@ -157,7 +138,7 @@ public abstract class NoSQLHelper {
     }
     
     /**
-     * Connect to the NoSQL KVStore
+     * Connect to the NoSQL KVStore.
      */
     public void connect() {
         // Build KV store config
@@ -206,17 +187,11 @@ public abstract class NoSQLHelper {
      * 
      */
     public abstract void initialize();
-    /**
-     * Process the received Flume event.
-     * @param event The Flume event we want to process
-     * @throws EventDeliveryException if a Flume error occurs
-     */
-    public abstract void process(Event event) throws EventDeliveryException;
+  
     
     /**
      * Process the received BDGlue event.
      * @param event the BDGlue event we want to process
-     * @throws EventDeliveryException if an error occurs
      */
-    public abstract void process(EventData event) throws EventDeliveryException;
+    public abstract void process(EventData event);
 }

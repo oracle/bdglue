@@ -26,8 +26,7 @@ import oracle.kv.avro.RawAvroBinding;
 import oracle.kv.avro.RawRecord;
 
 import org.apache.avro.Schema;
-import org.apache.flume.Event;
-import org.apache.flume.FlumeException;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,15 +72,6 @@ public class NoSQLKVHelper extends NoSQLHelper {
         processAvro(event.getHeaders(), (byte[])event.eventBody());
     }
 
-    /**
-     * Process the KV event.
-     *
-     * @param event the Flume Event
-     */
-    @Override
-    public void process(Event event) {
-        processAvro(event.getHeaders(), event.getBody());
-    }
 
     /**
      * Write the event data to NoSQL using the KV API.
@@ -97,12 +87,12 @@ public class NoSQLKVHelper extends NoSQLHelper {
         
         rowKeyStr = hdrs.get("rowKey");
         if (rowKeyStr == null) {
-            throw new FlumeException("No row key found in headers!");
+            throw new RuntimeException("No row key found in headers!");
         }
         
         tableName = hdrs.get("table");
         if (tableName == null) {
-            throw new FlumeException("No table name found in headers!");
+            throw new RuntimeException("No table name found in headers!");
         }
         
         LOG.debug("processAvro): Table={} Key={}", tableName, rowKeyStr);
@@ -151,7 +141,7 @@ public class NoSQLKVHelper extends NoSQLHelper {
         
         schema = schemas.get(tableName);
         if (schema == null) {
-            throw new FlumeException("Avro schema not found: " + tableName);
+            throw new RuntimeException("Avro schema not found: " + tableName);
         }
         raw = new RawRecord(avroBody, schema);
         

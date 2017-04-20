@@ -28,9 +28,6 @@ import oracle.kv.table.Row;
 import oracle.kv.table.Table;
 import oracle.kv.table.TableAPI;
 
-import org.apache.flume.Event;
-import org.apache.flume.EventDeliveryException;
-import org.apache.flume.FlumeException;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
@@ -82,16 +79,15 @@ public class NoSQLTableHelper extends NoSQLHelper {
      * the preferred (and most efficient) interace is to leverage the NullEncoder.
      * 
      * @param event the BDGlue event we want to process.
-     * @throws EventDeliveryException if we encounter an error
      */
     @Override
-    public void process(EventData event) throws EventDeliveryException {
+    public void process(EventData event)  {
         String tableName;
         
         LOG.trace("processing TABLE event");
         tableName = event.getHeaders().get("table");
         if (tableName == null) {
-            throw new EventDeliveryException("No table name found in headers!");
+            throw new RuntimeException("No table name found in headers!");
         }
         
         switch(event.getEncoderType()) {
@@ -102,32 +98,10 @@ public class NoSQLTableHelper extends NoSQLHelper {
             processOperation(tableName, (DownstreamOperation)event.eventBody());
             break;
         default:
-            throw new EventDeliveryException("Unexpected EncoderType encountered");
+            throw new RuntimeException("Unexpected EncoderType encountered");
         }
     }
-    
-    /**
-     * Process the Flume event and generate a new row in the table.
-     *
-     * @param event the Flume event we want to process
-     * @throws EventDeliveryException if we encounter an error.
-     */
-    @Override
-    public void process(Event event) throws EventDeliveryException {
-        String tableName;
-
-
-        LOG.trace("processing TABLE event");
-        tableName = event.getHeaders().get("table");
-        if (tableName == null) {
-            throw new FlumeException("No table name found in headers!");
-        }
-        /*
-         * At present, this only gets called via the Flume sink,
-         * and data for the table API will always be in JSON format.
-         */
-        processJSON(tableName, event.getBody());
-    }
+   
 
     /**
      * Iterate through the operation and write to NoSQL.
@@ -233,9 +207,8 @@ public class NoSQLTableHelper extends NoSQLHelper {
      * 
      * @param tableName the name of the table
      * @param jsonBody the operation we are processing encoded as JSON
-     * @throws EventDeliveryException if we encounter an error
      */
-    public void processJSON(String tableName, byte[] jsonBody) throws EventDeliveryException {
+    public void processJSON(String tableName, byte[] jsonBody)  {
         Table table;
         Row row;
         String columnName;
@@ -282,7 +255,7 @@ public class NoSQLTableHelper extends NoSQLHelper {
                     default:
                         // not a token we care about right now
                         LOG.error("Unhandled Json value type encountered during parsing");
-                        throw new FlumeException("Unrecognized JSON value type");
+                        throw new RuntimeException("Unrecognized JSON value type");
                     }
 
                 }
@@ -290,7 +263,7 @@ public class NoSQLTableHelper extends NoSQLHelper {
             parser.close();
         } catch (IOException e) {
             LOG.error("process() exception:", e.getMessage());
-            throw new EventDeliveryException("Json parsing error");
+            throw new RuntimeException("Json parsing error");
         }
 
         tableHandle.put(row, null, null);
