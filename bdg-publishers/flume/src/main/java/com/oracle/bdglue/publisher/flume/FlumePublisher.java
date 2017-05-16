@@ -62,10 +62,14 @@ public class FlumePublisher implements BDGluePublisher {
         client = null;
         properties = PropertyManagement.getProperties();
         rpcType = getRPCType();
-        rpcMaxRetries = properties.asInt(BDGluePropertyValues.FLUME_RPC_RETRIES, BDGluePropertyValues.FLUME_RPC_RETRY_DEFAULT);
-        rpcRetryDelaySecs = properties.asInt(BDGluePropertyValues.FLUME_RPC_RETRY_DELAY, BDGluePropertyValues.FLUME_RPC_RETRY_DELAY_DEFAULT);
-        hostname = properties.getProperty(BDGluePropertyValues.FLUME_HOST, BDGluePropertyValues.FLUME_HOST_DEFAULT);
-        port = properties.asInt(BDGluePropertyValues.FLUME_PORT, BDGluePropertyValues.FLUME_PORT_DEFAULT);
+        rpcMaxRetries = properties.asInt(FlumePublisherPropertyValues.FLUME_RPC_RETRIES, 
+                                         FlumePublisherPropertyValues.FLUME_RPC_RETRY_DEFAULT);
+        rpcRetryDelaySecs = properties.asInt(FlumePublisherPropertyValues.FLUME_RPC_RETRY_DELAY, 
+                                             FlumePublisherPropertyValues.FLUME_RPC_RETRY_DELAY_DEFAULT);
+        hostname = properties.getProperty(FlumePublisherPropertyValues.FLUME_HOST, 
+                                          FlumePublisherPropertyValues.FLUME_HOST_DEFAULT);
+        port = properties.asInt(FlumePublisherPropertyValues.FLUME_PORT, 
+                                FlumePublisherPropertyValues.FLUME_PORT_DEFAULT);
     }
 
     /**
@@ -217,7 +221,8 @@ public class FlumePublisher implements BDGluePublisher {
      */
     public RPCType getRPCType() {
         RPCType rval;
-        String rpcString = properties.getProperty(BDGluePropertyValues.FLUME_RPC_TYPE, BDGluePropertyValues.FLUME_RPC_TYPE_DEFAULT);
+        String rpcString = properties.getProperty(FlumePublisherPropertyValues.FLUME_RPC_TYPE, 
+                                                  FlumePublisherPropertyValues.FLUME_RPC_TYPE_DEFAULT);
         if (rpcString.equalsIgnoreCase("avro-rpc"))
             rval = RPCType.AVRO_RPC;
         else if (rpcString.equalsIgnoreCase("thrift-rpc"))

@@ -45,7 +45,8 @@ public class NoSQLPublisher implements BDGluePublisher {
         
         LOG.info("NoSQLPublisher()");
         properties = PropertyManagement.getProperties();
-        kvAPI = properties.getProperty(BDGluePropertyValues.NOSQL_API, BDGluePropertyValues.NOSQL_API_DEFAULT);
+        kvAPI = properties.getProperty(NoSQLPublisherPropertyValues.NOSQL_API, 
+                                       NoSQLPublisherPropertyValues.NOSQL_API_DEFAULT);
         helper = NoSQLHelper.helperFactory(kvAPI);
         helper.configure(properties);
     }

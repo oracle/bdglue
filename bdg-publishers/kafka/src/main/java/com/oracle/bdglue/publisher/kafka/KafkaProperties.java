@@ -16,10 +16,8 @@
  */
 package com.oracle.bdglue.publisher.kafka;
 
-import com.oracle.bdglue.BDGluePropertyValues;
 import com.oracle.bdglue.common.PropertyManagement;
 
-import java.util.Map;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -126,7 +124,7 @@ public class KafkaProperties {
      * @return the topic as a String
      */
     public static String getKafkaTopic() {
-        return PropertyManagement.getProperties().getProperty(BDGluePropertyValues.KAFKA_TOPIC,
+        return PropertyManagement.getProperties().getProperty(KafkaPublisherPropertyValues.KAFKA_TOPIC,
                                                               KafkaProperties.DEFAULT_TOPIC);
     }
     /**
@@ -134,7 +132,7 @@ public class KafkaProperties {
      * @return the batch size as an integer
      */
     public static int getKafkaBatchSize() {
-        return PropertyManagement.getProperties().asInt(BDGluePropertyValues.KAFKA_BATCH_SIZE, 
+        return PropertyManagement.getProperties().asInt(KafkaPublisherPropertyValues.KAFKA_BATCH_SIZE, 
                                      String.valueOf(KafkaProperties.DEFAULT_BATCH_SIZE));
     }
     
@@ -143,7 +141,7 @@ public class KafkaProperties {
      * @return the flush frequency in milliseconds as an integer
      */
     public static int getKafkaFlushFreq() {
-        return PropertyManagement.getProperties().asInt(BDGluePropertyValues.KAFKA_FLUSH_FREQ, 
+        return PropertyManagement.getProperties().asInt(KafkaPublisherPropertyValues.KAFKA_FLUSH_FREQ, 
                                      String.valueOf(KafkaProperties.DEFAULT_FLUSH_FREQ));
     }
     
@@ -159,19 +157,21 @@ public class KafkaProperties {
         PropertyManagement properties = PropertyManagement.getProperties();
         Properties kafkaProperties = new Properties();
     
-        value = properties.getProperty(BDGluePropertyValues.KAFKA_MESSAGE_SERIALIZER,
+        value = properties.getProperty(KafkaPublisherPropertyValues.KAFKA_MESSAGE_SERIALIZER,
                                    KafkaProperties.DEFAULT_MESSAGE_SERIALIZER);
         kafkaProperties.setProperty(KafkaProperties.MESSAGE_SERIALIZER, value);
 
-        value = properties.getProperty(BDGluePropertyValues.KAFKA_KEY_SERIALIZER, KafkaProperties.DEFAULT_KEY_SERIALIZER);
+        value = properties.getProperty(KafkaPublisherPropertyValues.KAFKA_KEY_SERIALIZER, 
+                                       KafkaProperties.DEFAULT_KEY_SERIALIZER);
         kafkaProperties.setProperty(KafkaProperties.KEY_SERIALIZER, value);
 
 
-        value = properties.getProperty(BDGluePropertyValues.KAFKA_BROKER_LIST, 
+        value = properties.getProperty(KafkaPublisherPropertyValues.KAFKA_BROKER_LIST, 
                                        "broker-not-specified");
         kafkaProperties.setProperty(KafkaProperties.BROKER_LIST, value);
         
-        value = properties.getProperty(BDGluePropertyValues.KAFKA_REQUIRED_ACKS, KafkaProperties.DEFAULT_REQUIRED_ACKS);
+        value = properties.getProperty(KafkaPublisherPropertyValues.KAFKA_REQUIRED_ACKS, 
+                                       KafkaProperties.DEFAULT_REQUIRED_ACKS);
         kafkaProperties.setProperty(KafkaProperties.REQUIRED_ACKS, value);
         
         tprops = properties.getPropertySubset(BDGLUE_PROPERTY_PREFIX, true);

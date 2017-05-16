@@ -6,7 +6,8 @@ install: all
 	mkdir -p $(output_dir)/lib/dependencies $(output_dir)/doc
 	cp $(CURDIR)/*/target/bdglue*.jar $(output_dir)/lib
 	cp $(CURDIR)/*/*/target/bdglue*.jar $(output_dir)/lib
-	cp $(CURDIR)/target/dependencies/*.jar $(output_dir)/lib/dependencies
+	cp -u $(CURDIR)/target/dependencies/*.jar $(output_dir)/lib/dependencies
+	cp -u $(CURDIR)/*/*/target/dependencies/*.jar $(output_dir)/lib/dependencies
 	cp -R $(CURDIR)/*/target/apidocs $(output_dir)/doc
 	cp -R $(CURDIR)/*/*/target/apidocs $(output_dir)/doc
 	cp $(CURDIR)/*.pdf $(output_dir)/doc

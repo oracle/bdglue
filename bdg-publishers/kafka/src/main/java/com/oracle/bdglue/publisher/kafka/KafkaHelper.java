@@ -18,7 +18,6 @@ package com.oracle.bdglue.publisher.kafka;
 
 import com.google.common.base.Throwables;
 
-import com.oracle.bdglue.BDGluePropertyValues;
 import com.oracle.bdglue.common.PropertyManagement;
 import com.oracle.bdglue.encoder.EventData;
 
@@ -30,7 +29,6 @@ import kafka.javaapi.producer.Producer;
 
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +65,7 @@ public class KafkaHelper {
         String className = null;
         Class<KafkaMessageHelper> clazz = null;
         properties = PropertyManagement.getProperties();
-        className = properties.getProperty(BDGluePropertyValues.KAFKA_MESSAGE_METADATA);
+        className = properties.getProperty(KafkaPublisherPropertyValues.KAFKA_MESSAGE_METADATA);
         if (className == null) {
             LOG.info("Message helper not set. Defaulting to KafkaMessageHelper");
             className = "com.oracle.bdglue.publisher.karka.KafkaMessageHelper";

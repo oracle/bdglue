@@ -72,7 +72,8 @@ public class GG12HandlerMapper {
     }
     
     /**
-     * Create the appropriate encoder and initialize.
+     * Create the appropriate encoder and initialize. The encoder will initialize
+     * the publishers as well.
      */
     public void init() {
 
@@ -91,6 +92,11 @@ public class GG12HandlerMapper {
         ignoreUnchangedRows = 
                 PropertyManagement.getProperties().asBoolean(BDGluePropertyValues.IGNORE_UNCHANGED, 
                                                              BDGluePropertyValues.IGNORE_UNCHANGED_DEFAULT);
+        
+        /*
+         * all properties should be initialized by now. Print them out.
+         */
+        PropertyManagement.getProperties().printProperties();
     }
     
     

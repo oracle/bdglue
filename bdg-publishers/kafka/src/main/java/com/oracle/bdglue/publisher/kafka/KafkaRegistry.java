@@ -16,18 +16,11 @@
  */
 package com.oracle.bdglue.publisher.kafka;
 
-import com.oracle.bdglue.BDGluePropertyValues;
 import com.oracle.bdglue.common.PropertyManagement;
-
-
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
-
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
-
 import java.io.IOException;
-
 import java.nio.ByteBuffer;
-
 import org.apache.avro.Schema;
 
 import org.apache.avro.generic.GenericDatumWriter;
@@ -55,10 +48,10 @@ public class KafkaRegistry {
         
         // get properties
         PropertyManagement properties = PropertyManagement.getProperties();
-        targetURL = properties.getProperty(BDGluePropertyValues.KAFKA_REGISTRY_URL, "http://localhost:8081");
-        maxSchemas = properties.asInt(BDGluePropertyValues.KAFKA_REGISTRY_MAX_SCHEMAS, "1000");
-        magic_byte = (byte)(properties.asInt(BDGluePropertyValues.KAFKA_REGISTRY_MAGIC_BYTE, "0"));
-        idSize = properties.asInt(BDGluePropertyValues.KAFKA_REGISTRY_ID_SIZE, "4");
+        targetURL = properties.getProperty(KafkaPublisherPropertyValues.KAFKA_REGISTRY_URL, "http://localhost:8081");
+        maxSchemas = properties.asInt(KafkaPublisherPropertyValues.KAFKA_REGISTRY_MAX_SCHEMAS, "1000");
+        magic_byte = (byte)(properties.asInt(KafkaPublisherPropertyValues.KAFKA_REGISTRY_MAGIC_BYTE, "0"));
+        idSize = properties.asInt(KafkaPublisherPropertyValues.KAFKA_REGISTRY_ID_SIZE, "4");
         
         client = new CachedSchemaRegistryClient(targetURL, maxSchemas);    
     }

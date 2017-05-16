@@ -16,7 +16,6 @@
  */
 package com.oracle.bdglue.publisher.asynchbase;
 
-import com.oracle.bdglue.BDGluePropertyValues;
 import com.oracle.bdglue.common.PropertyManagement;
 import com.oracle.bdglue.encoder.EventData;
 import com.oracle.bdglue.meta.transaction.DownstreamColumnData;
@@ -42,9 +41,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HConstants;
 
 import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonToken;
 
 import org.hbase.async.AtomicIncrementRequest;
 import org.hbase.async.HBaseClient;
@@ -60,6 +57,22 @@ import org.slf4j.LoggerFactory;
  */
 public class AsyncHbaseHelper {
     private static final Logger LOG = LoggerFactory.getLogger(AsyncHbaseHelper.class);
+    
+    /**
+     * The name of the event header "property" that will contain
+     * the target table name.
+     */
+    private static final String TABLE_HDR = "table";
+    /**
+     * The name of the event header "property" that will contain
+     * the target column family name for this event.
+     */
+    private static final String COLUMN_FAMILY_HDR = "columnFamily";
+    /**
+     * The name of the event header "property" that will contain
+     * the target key value for this event.
+     */
+    private static final String ROWKEY_HDR = "rowKey";
     
     
     private HBaseClient client;
@@ -100,13 +113,15 @@ public class AsyncHbaseHelper {
      */
     public void configure(PropertyManagement properties) {
         batchSize =
-            properties.asInt(BDGluePropertyValues.ASYNC_HBASE_BATCHSIZE, AsyncHbaseProperties.DEFAULT_BATCHSIZE);
+            properties.asInt(AsyncHbasePublisherPropertyValues.ASYNC_HBASE_BATCHSIZE, 
+                             AsyncHbasePublisherPropertyValues.DEFAULT_BATCHSIZE);
 
         timeout =
-            properties.asInt(BDGluePropertyValues.ASYNC_HBASE_TIMEOUT, AsyncHbaseProperties.DEFAULT_TIMEOUT);
+            properties.asInt(AsyncHbasePublisherPropertyValues.ASYNC_HBASE_TIMEOUT, 
+                             AsyncHbasePublisherPropertyValues.DEFAULT_TIMEOUT);
         if (timeout <= 0) {
             LOG.warn("Timeout should be positive for Hbase sink. " + "Sink will not timeout.");
-            timeout = Integer.parseInt(AsyncHbaseProperties.DEFAULT_TIMEOUT);
+            timeout = Integer.parseInt(AsyncHbasePublisherPropertyValues.DEFAULT_TIMEOUT);
         }
 
         logConfiguration();
@@ -180,19 +195,19 @@ public class AsyncHbaseHelper {
         /*
          * Extracts the needed information from the event header
          */
-        String rowKeyStr = event.getHeaders().get(AsyncHbaseProperties.ROWKEY_HDR);
+        String rowKeyStr = event.getHeaders().get(ROWKEY_HDR);
         if (rowKeyStr == null) {
            throw new RuntimeException("No row key found in headers!");
         }
         currentRowKey = rowKeyStr.getBytes();
         
-        String tableStr = event.getHeaders().get(AsyncHbaseProperties.TABLE_HDR);
+        String tableStr = event.getHeaders().get(TABLE_HDR);
         if (tableStr == null) {
            throw new RuntimeException("No table name found in headers!");
         }
         table = tableStr.getBytes();
         
-        String cf = event.getHeaders().get(AsyncHbaseProperties.COLUMN_FAMILY_HDR);
+        String cf = event.getHeaders().get(COLUMN_FAMILY_HDR);
         if (cf == null) {
            throw new RuntimeException("No column family found in headers!");
         }

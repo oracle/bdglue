@@ -80,16 +80,16 @@ public abstract class NoSQLHelper {
      * @param properties the properties we want to leverage
      */
     public void configure(PropertyManagement properties) {
-        kvHost = properties.getProperty(BDGluePropertyValues.NOSQL_HOST, 
-                                        BDGluePropertyValues.NOSQL_HOST_DEFAULT);
-        kvPort = properties.getProperty(BDGluePropertyValues.NOSQL_PORT, 
-                                        BDGluePropertyValues.NOSQL_PORT_DEFAULT);
-        kvStoreName = properties.getProperty(BDGluePropertyValues.NOSQL_KVSTORE, 
-                                             BDGluePropertyValues.NOSQL_KVSTORE_DEFAULT);
-        kvStoreDurability = properties.getProperty(BDGluePropertyValues.NOSQL_DURABILITY,
-                                                   BDGluePropertyValues.NOSQL_DURABILITY_DEFAULT);
-        setAPIType(properties.getProperty(BDGluePropertyValues.NOSQL_API, 
-                                          BDGluePropertyValues.NOSQL_API_DEFAULT));
+        kvHost = properties.getProperty(NoSQLPublisherPropertyValues.NOSQL_HOST, 
+                                        NoSQLPublisherPropertyValues.NOSQL_HOST_DEFAULT);
+        kvPort = properties.getProperty(NoSQLPublisherPropertyValues.NOSQL_PORT, 
+                                        NoSQLPublisherPropertyValues.NOSQL_PORT_DEFAULT);
+        kvStoreName = properties.getProperty(NoSQLPublisherPropertyValues.NOSQL_KVSTORE, 
+                                             NoSQLPublisherPropertyValues.NOSQL_KVSTORE_DEFAULT);
+        kvStoreDurability = properties.getProperty(NoSQLPublisherPropertyValues.NOSQL_DURABILITY,
+                                                   NoSQLPublisherPropertyValues.NOSQL_DURABILITY_DEFAULT);
+        setAPIType(properties.getProperty(NoSQLPublisherPropertyValues.NOSQL_API, 
+                                          NoSQLPublisherPropertyValues.NOSQL_API_DEFAULT));
         
         logConfiguration();
     }

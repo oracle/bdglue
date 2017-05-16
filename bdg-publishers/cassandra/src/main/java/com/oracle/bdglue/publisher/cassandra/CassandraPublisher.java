@@ -19,13 +19,10 @@ package com.oracle.bdglue.publisher.cassandra;
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
-
 import com.datastax.driver.core.Host;
 import com.datastax.driver.core.Metadata;
-
 import com.datastax.driver.core.Session;
 
-import com.oracle.bdglue.BDGluePropertyValues;
 import com.oracle.bdglue.common.PropertyManagement;
 import com.oracle.bdglue.encoder.EventData;
 import com.oracle.bdglue.encoder.EventHeader;
@@ -33,7 +30,6 @@ import com.oracle.bdglue.meta.transaction.DownstreamOperation;
 import com.oracle.bdglue.publisher.BDGluePublisher;
 
 import java.util.HashMap;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -71,17 +67,17 @@ public class CassandraPublisher implements BDGluePublisher {
 
         PropertyManagement properties = PropertyManagement.getProperties();
         cassandraNode =
-            properties.getProperty(BDGluePropertyValues.CASSANDRA_CONNECT_NODE,
-                                   BDGluePropertyValues.CASSANDRA_CONNECT_NODE_DEFAULT);
+            properties.getProperty(CassandraPublisherPropertyValues.CASSANDRA_CONNECT_NODE,
+                                   CassandraPublisherPropertyValues.CASSANDRA_CONNECT_NODE_DEFAULT);
         batchSize =
-            properties.asInt(BDGluePropertyValues.CASSANDRA_BATCH_SIZE,
-                             BDGluePropertyValues.CASSANDRA_BATCH_SIZE_DEFAULT);
+            properties.asInt(CassandraPublisherPropertyValues.CASSANDRA_BATCH_SIZE,
+                             CassandraPublisherPropertyValues.CASSANDRA_BATCH_SIZE_DEFAULT);
         flushFreq =
-            properties.asInt(BDGluePropertyValues.CASSANDRA_FLUSH_FREQ,
-                             BDGluePropertyValues.CASSANDRA_FLUSH_FREQ_DEFAULT);
+            properties.asInt(CassandraPublisherPropertyValues.CASSANDRA_FLUSH_FREQ,
+                             CassandraPublisherPropertyValues.CASSANDRA_FLUSH_FREQ_DEFAULT);
         insertOnly =
-            properties.asBoolean(BDGluePropertyValues.CASSANDRA_INSERT_ONLY,
-                                 BDGluePropertyValues.CASSANDRA_INSERT_ONLY_DEFAULT);
+            properties.asBoolean(CassandraPublisherPropertyValues.CASSANDRA_INSERT_ONLY,
+                                 CassandraPublisherPropertyValues.CASSANDRA_INSERT_ONLY_DEFAULT);
 
         batch = new BatchStatement(BatchStatement.Type.LOGGED);
         map = new HashMap<>();

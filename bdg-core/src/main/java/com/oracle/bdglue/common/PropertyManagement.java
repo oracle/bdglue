@@ -166,7 +166,7 @@ public class PropertyManagement {
         properties = new Properties(defaults);
         loadExternalProperties(externalProperties);
         
-        printProperties(properties);
+        //printProperties(properties);
 
     }
     
@@ -262,6 +262,13 @@ public class PropertyManagement {
         }
 
         return subset;
+    }
+    
+    /**
+     * Print the properties for this instance of PropertyManagement.
+     */
+    public void printProperties() {
+        printProperties(properties);
     }
 
     /**
